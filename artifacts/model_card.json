@@ -1,0 +1,31 @@
+{
+  "model_name": "Pneumonia classifier (DenseNet121 transfer learning)",
+  "version": "1.0.0",
+  "classes": [
+    "NORMAL",
+    "PNEUMONIA"
+  ],
+  "input": "RGB uint8 160x160 (grayscale X-ray replicated to 3 channels); preprocessing inside model",
+  "decision_threshold": 0.0981,
+  "threshold_policy": "Chosen on validation set for \u226595% sensitivity",
+  "test_metrics": {
+    "threshold": 0.098,
+    "accuracy": 0.8495,
+    "sensitivity (recall)": 0.9845,
+    "specificity": 0.6234,
+    "precision (PPV)": 0.8141,
+    "NPV": 0.96,
+    "F1": 0.8912,
+    "ROC-AUC": 0.9554,
+    "PR-AUC": 0.9706,
+    "FN": 6,
+    "FP": 87
+  },
+  "training_data": "Kaggle paultimothymooney/chest-xray-pneumonia, patient-level re-split of train+val",
+  "intended_use": "Research / portfolio demo. Decision support only \u2014 NOT for clinical diagnosis.",
+  "limitations": [
+    "Pediatric (1-5 yrs) single-centre data",
+    "Binary only (no bacterial/viral split)",
+    "Not validated on adult or external hospital data"
+  ]
+}

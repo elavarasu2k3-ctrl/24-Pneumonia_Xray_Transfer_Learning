@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "img_size": 160,
+  "batch_size": 32,
+  "epochs_baseline": 3,
+  "epochs_stage1": 3,
+  "epochs_stage2": 4,
+  "lr_stage1": 0.001,
+  "lr_stage2": 1e-05,
+  "unfreeze_last_n": 30,
+  "val_fraction": 0.15,
+  "backbone": "DenseNet121",
+  "classes": [
+    "NORMAL",
+    "PNEUMONIA"
+  ],
+  "artifacts_dir": "artifacts"
+}

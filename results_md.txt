@@ -1,0 +1,19 @@
+### Results — quick CPU run (160×160 images, 3+3+4 epochs, laptop CPU, total ≈ 58 min)
+Official test set: 618 images (390 Pneumonia / 228 Normal after removing duplicates), untouched until the end.
+
+| Model | Threshold | Accuracy | ROC-AUC | PR-AUC | Sensitivity | Specificity | F1 | Missed pneumonia (FN) | False alarms (FP) |
+|---|---|---|---|---|---|---|---|---|---|
+| Baseline CNN | 0.50 | 0.628 | 0.853 | 0.886 | 1.000 | 0.004 | 0.771 | 0 | 230 |
+| DenseNet121 (fine-tuned) | 0.50 | **0.877** | **0.955** | **0.971** | 0.928 | **0.792** | **0.904** | 28 | 48 |
+| DenseNet121 (fine-tuned) | 0.098 (clinical, chosen on val) | 0.850 | 0.955 | 0.971 | **0.984** | 0.623 | 0.891 | **6** | 87 |
+
+- Bootstrap 95% CI: **ROC-AUC 0.955 (0.940–0.970)**, sensitivity at the clinical threshold **0.984 (0.972–0.995)**.
+- Validation AUC: baseline 0.944 → DenseNet Stage 1 0.992 → Stage 2 **0.993**.
+- The baseline "predicts pneumonia for everyone" on test (specificity 0.4%) — it overfits the train/val distribution; transfer learning generalises far better.
+- The clinical threshold cuts missed pneumonia cases from 28 to **6**, at the cost of 39 more false alarms that a radiologist would review.
+- Error analysis: all errors on Normal images are false alarms (37.7% of Normals at the clinical threshold); misses are rare for both bacterial (2.1%) and viral (0.7%) cases.
+- Val (0.993 AUC) → test (0.955) drop is expected: the official test set has a different class mix (62.6% vs 74.1% pneumonia) and was graded separately.
+- Data findings: 62 exact duplicate images removed; `personN` IDs restart in `test/` (170 shared numbers, all with different subtype) → separate ID namespace.
+- Export: Keras model 36.4 MB, TFLite 7.6 MB; reloaded model reproduces predictions.
+
+*A full GPU run (224×224, more epochs) on Kaggle/Colab typically adds a few points of specificity.*
